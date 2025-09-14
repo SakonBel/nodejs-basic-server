@@ -1,13 +1,18 @@
 const fs = require("fs");
 const express = require("express");
 
+// Initialize server
 const app = express();
+const PORT = 8000;
 
-const port = 8000;
-
+// Retrieve all the posts
 const posts = JSON.parse(fs.readFileSync(`${__dirname}/posts.json`));
 
-// Route functions
+// Route paths
+const TO_ALL_POSTS = "/posts";
+const TO_SINGLE_POST = "/posts/:id";
+
+// Route handlers
 const getAllPosts = (req, res) => {
   res.status(200).json({
     status: "success",
@@ -77,13 +82,15 @@ const deletePost = (req, res) => {
   );
 };
 
-// Get request (All posts)
-app.get("/posts", getAllPosts);
-app.get("/posts/:id", getSinglePost);
-app.post("/posts", addPost);
-app.patch("/posts/:id", modifyPost);
-app.delete("/posts/:id", deletePost);
+// Routes
+app.route(TO_ALL_POSTS).get(getAllPosts).post(addPost);
+app
+  .route(TO_SINGLE_POST)
+  .get(getSinglePost)
+  .patch(modifyPost)
+  .delete(deletePost);
 
-app.listen(port, () => {
-  console.log(`Listening on port ${port}......`);
+// Listening on the server
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}......`);
 });
