@@ -5,6 +5,8 @@ const postsCont = require("./../controllers/postsController");
 // Create router
 const router = express.Router();
 
+router.param("/:id", postsCont.checkID);
+
 // Routes
 router.route("/").get(postsCont.getAllPosts).post(postsCont.addPost);
 router

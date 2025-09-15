@@ -5,6 +5,16 @@ const FILE_PATH = `${__dirname}/../posts.json`;
 // Retrieve all the posts
 const posts = JSON.parse(fs.readFileSync(FILE_PATH));
 
+// Middleware params handler
+exports.checkID = (req, res, next, val) => {
+  if (!val)
+    return res.status(404).json({
+      status: "Error",
+      message: "Post not found!",
+    });
+  next();
+};
+
 // Route handlers
 exports.getAllPosts = (req, res) => {
   res.status(200).json({
