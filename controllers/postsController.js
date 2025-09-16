@@ -14,6 +14,15 @@ exports.checkID = (req, res, next, val) => {
     });
   next();
 };
+exports.checkBody = (req, res, next) => {
+  if (!req.body.title || !req.body.body) {
+    return res.status(404).json({
+      status: "Error",
+      message: "No title or body",
+    });
+  }
+  next();
+};
 
 // Route handlers
 exports.getAllPosts = (req, res) => {
@@ -42,18 +51,21 @@ exports.getSinglePost = (req, res) => {
 };
 exports.addPost = (req, res) => {
   const newId = posts[posts.length - 1].id + 1;
-  const post = {
-    id: newId,
-    title: "How to post",
-    body: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nesciunt ratione, libero vel voluptas distinctio numquam labore quo expedita non omnis voluptates obcaecati odio at eos quisquam officiis voluptatum ipsum totam.",
-  };
+  const post = Object.assign(
+    {
+      id: newId,
+    },
+    req.body
+  );
 
   posts.push(post);
 
   fs.writeFile(FILE_PATH, JSON.stringify(posts), (err) => {
     res.status(201).json({
       status: "success",
-      data: "Post written!",
+      data: {
+        post,
+      },
     });
   });
 };
