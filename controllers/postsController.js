@@ -1,4 +1,4 @@
-const fs = require("fs");
+const fs = require('fs');
 
 const FILE_PATH = `${__dirname}/../posts.json`;
 
@@ -9,16 +9,16 @@ const posts = JSON.parse(fs.readFileSync(FILE_PATH));
 exports.checkID = (req, res, next, val) => {
   if (!val)
     return res.status(404).json({
-      status: "Error",
-      message: "Post not found!",
+      status: 'Error',
+      message: 'Post not found!',
     });
   next();
 };
 exports.checkBody = (req, res, next) => {
   if (!req.body.title || !req.body.body) {
     return res.status(404).json({
-      status: "Error",
-      message: "No title or body",
+      status: 'Error',
+      message: 'No title or body',
     });
   }
   next();
@@ -27,7 +27,7 @@ exports.checkBody = (req, res, next) => {
 // Route handlers
 exports.getAllPosts = (req, res) => {
   res.status(200).json({
-    status: "success",
+    status: 'success',
     result: posts.length,
     data: {
       posts,
@@ -39,11 +39,11 @@ exports.getSinglePost = (req, res) => {
   const post = posts.find((el) => el.id === id);
 
   if (!post) {
-    return res.status(404).json({ status: "fail", message: "Post not found" });
+    return res.status(404).json({ status: 'fail', message: 'Post not found' });
   }
 
   res.status(200).json({
-    status: "success",
+    status: 'success',
     data: {
       post,
     },
@@ -55,14 +55,14 @@ exports.addPost = (req, res) => {
     {
       id: newId,
     },
-    req.body
+    req.body,
   );
 
   posts.push(post);
 
   fs.writeFile(FILE_PATH, JSON.stringify(posts), (err) => {
     res.status(201).json({
-      status: "success",
+      status: 'success',
       data: {
         post,
       },
@@ -73,11 +73,11 @@ exports.modifyPost = (req, res) => {
   const id = parseInt(req.params.id);
   const post = posts.find((el) => el.id === id);
   if (!post) {
-    return res.status(404).json({ status: "fail", message: "Post not found" });
+    return res.status(404).json({ status: 'fail', message: 'Post not found' });
   }
   res.status(200).json({
-    status: "success",
-    message: "The post has been updated!",
+    status: 'success',
+    message: 'The post has been updated!',
     data: post,
   });
 };
@@ -90,9 +90,9 @@ exports.deletePost = (req, res) => {
     JSON.stringify(newPosts),
     (err) => {
       res.status(204).json({
-        status: "success",
-        message: "The post has been deleted!",
+        status: 'success',
+        message: 'The post has been deleted!',
       });
-    }
+    },
   );
 };
