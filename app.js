@@ -4,6 +4,9 @@ const postsRouter = require("./routes/postsRoutes");
 
 // Initialize server
 const app = express();
+// Look at the environment that we are currently in.
+console.log(app.get("env"));
+
 // Parse JSON bodies
 app.use(express.json());
 // Serve static files
